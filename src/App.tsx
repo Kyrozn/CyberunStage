@@ -19,6 +19,11 @@ const App: React.FC = () => {
   const [selectedUiSchema, setSelectedUiSchema] = useState(
     schemas["base"].uischema
   );
+  {
+    /*This things seems weird but it's simple, it's a function who take in parameter or "personal" or "professional",
+    keep previous state (...prev -> ex: expandedSections = { personal: false, professional: false})
+    and set the sections selected = of it opposite (!prev[section])*/
+  }
   const toggleSection = (section: "personal" | "professional") => {
     setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
@@ -58,14 +63,16 @@ const App: React.FC = () => {
         open={visible}
         className="drawer"
       >
+        {/* Iterate through the menu schema (Schema.ts), to do a dynamical Drawer. 
+        If we need to add more category, it's possible to do it without has knowledge in developpement, just need to append the menu schema*/}
         {Object.entries(menu).map(([categoryKey, category]) => (
           <Menu mode="vertical" theme="dark" key={categoryKey}>
             <Menu.Item
-              onClick={() => (
+              onClick={() =>
                 toggleSection(
                   categoryKey === "PersoInfo" ? "personal" : "professional"
                 )
-              )}
+              }
               className="category"
             >
               <strong>{category.Title}</strong>
@@ -74,6 +81,8 @@ const App: React.FC = () => {
               categoryKey === "PersoInfo" ? "personal" : "professional"
             ] && (
               <>
+                {/* this time iterate through subcategory of the menu (Schema.ts). 
+                If we need to add more subcategory, it's possible like the menu, don't need knowledge just need to append the subcategory(schema) schema*/}
                 {Object.entries(category.subtitle).map(
                   ([subKey, subItem]: [string, any]) => {
                     const schemaKey = getSchemaKey(subItem.Link);
